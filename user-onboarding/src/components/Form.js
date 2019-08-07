@@ -54,8 +54,13 @@ const FormikUserForm = withFormik({
         term: Yup.bool().oneOf([true], 'Term must be checked')    
     }),
 
-    handleSubmit(values, { resetForm, setStatus }) {
+    handleSubmit(values, { resetForm, setStatus, setErrors }) {
         console.log("handleSubmit clicked");
+        if(values.email === 'waffle@syrup.com') {
+            setErrors({ email: 'That email is already taken.'})
+        } else {
+            resetForm()
+        }
         axios
             .post("https://reqres.in/api/users/", values)
             .then(res => {
