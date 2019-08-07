@@ -1,16 +1,22 @@
 import React from 'react';
 import { Form, Field, withFormik } from 'formik';
+import * as Yup from 'yup';
+import ErrorWithStack from 'jest-util/build/ErrorWithStack';
 
-const UserForm = ({}) => {
+const UserForm = ({ errors, touched }) => {
     return (
-        <div>
+        <div className="user-form">
+            <h1>Join us today</h1>
             <Form>
                 <Field type="text" name="name" placeholder="Name" />
+                {touched.name && errors.name && (<p className="error">{errors.name}</p>)}
                 <Field type="text" name="email" placeholder="Email" />
+                {touched.email && errors.email && (<p className="error">{errors.email}</p>)}
                 <Field type="text" name="password" placeholder="Password" />
+                {touched.password && errors.password && (<p className="error">{errors.password}</p>)}
                 <label>
                     <Field type="checkbox" name="service" />
-                    Join our service
+                    Subscribe our newsletter
                 </label>
                 <button>Submit</button>
             </Form>
@@ -19,7 +25,19 @@ const UserForm = ({}) => {
 }
 
 const FormikUserForm = withFormik({
-
+    mapPropsToValues(values) {
+        return {
+            name: values.name || '',
+            email: values.email || '',
+            password: values.password || '',
+            service: values.service || false,
+        }
+    },
+    validationSchema: Yup.object().shape({
+        name: Yup.string().required('Name is required!'),
+        email: Yup.string().email('Email not valid').required('Email is required!'),
+        password: Yup.string().min(8, 'Password must be 8 characters of longer').required('Password is required!'),
+        })
 })(UserForm);
 
 export default FormikUserForm;
