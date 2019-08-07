@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Field, withFormik } from 'formik';
 import * as Yup from 'yup';
-import ErrorWithStack from 'jest-util/build/ErrorWithStack';
+import axios from 'axios';
 
 const UserForm = ({ errors, touched }) => {
     return (
@@ -18,7 +18,7 @@ const UserForm = ({ errors, touched }) => {
                     <Field type="checkbox" name="service" />
                     Subscribe our newsletter
                 </label>
-                <button>Submit</button>
+                <button type="submit">Submit</button>
             </Form>
         </div>
     )
@@ -37,7 +37,14 @@ const FormikUserForm = withFormik({
         name: Yup.string().required('Name is required!'),
         email: Yup.string().email('Email not valid').required('Email is required!'),
         password: Yup.string().min(8, 'Password must be 8 characters of longer').required('Password is required!'),
-        })
+        }),
+    handleSubmit(values) {
+        console.log("handleSubmit clicked");
+        axios
+            .post("https://reqres.in/api/users/", values)
+            .then(res => console.log(res))
+            .catch(err => console.log(err.response));
+    }
 })(UserForm);
 
 export default FormikUserForm;
