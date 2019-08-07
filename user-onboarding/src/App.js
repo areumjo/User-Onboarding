@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import UserForm from './Form.js';
 
 function App() {
   return (
@@ -7,6 +8,7 @@ function App() {
       <header className="App-header">
         <p>setting up</p>
       </header>
+      <UserForm />
     </div>
   );
 }
