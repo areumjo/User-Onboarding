@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import User from './User.js';
 
-const UserForm = ({ errors, touched, status }) => {
+const UserForm = ({ errors, touched, status, isSubmitting }) => {
 
     const [user, setUser] = useState([]);
 
@@ -23,11 +23,12 @@ const UserForm = ({ errors, touched, status }) => {
                 {touched.name && errors.name && (<p className="error">{errors.name}</p>)}
                 <Field type="text" name="email" placeholder="Email" />
                 {touched.email && errors.email && (<p className="error">{errors.email}</p>)}
-                <Field type="text" name="password" placeholder="Password" />
+                <Field type="password" name="password" placeholder="Password" />
                 {touched.password && errors.password && (<p className="error">{errors.password}</p>)}
-                <label>
-                    <Field type="checkbox" name="term" />
-                    Accept Terms of Service
+                
+                <label className="checkbox-container">
+                    <Field type="checkbox" name="term" className="checkbox"/>
+                    <span>Accept Terms of Service</span>
                 </label>
                 <button type="submit">Submit</button>
             </Form>
@@ -53,13 +54,16 @@ const FormikUserForm = withFormik({
         term: Yup.bool().oneOf([true], 'Term must be checked')    
     }),
 
-    handleSubmit(values, { setStatus }) {
+    handleSubmit(values, { resetForm, setStatus }) {
         console.log("handleSubmit clicked");
         axios
             .post("https://reqres.in/api/users/", values)
             .then(res => {
                 console.log(res)
                 setStatus(res.data.name)
+                setTimeout(() => {
+                    resetForm()
+                }, 1000)
             })
             .catch(err => console.log(err.response));
     }
