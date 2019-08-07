@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import UserForm from './Form.js';
+import UserForm from './components/Form.js';
 
 function App() {
   return (
